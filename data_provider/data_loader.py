@@ -26,7 +26,7 @@ class Dataset_ETT_hour(Dataset):
             self.label_len = size[1]
             self.pred_len = size[2]
         # init
-        assert flag in ['train', 'test', 'val']
+        assert flag in ['train', 'test', 'val']#如果它的条件返回错误，则终止程序运行
         type_map = {'train': 0, 'val': 1, 'test': 2}
         self.set_type = type_map[flag]
 
@@ -41,10 +41,20 @@ class Dataset_ETT_hour(Dataset):
         self.__read_data__()
 
     def __read_data__(self):
-        self.scaler = StandardScaler()
-        df_raw = pd.read_csv(os.path.join(self.root_path,
+        self.scaler = StandardScaler()#去均值和方差归一化，且针对每一个特征维度来做，而不是针对样本
+        df_raw = pd.read_csv(os.path.join(self.root_path,#用于路径拼接文件路径，可以传入多个路径
                                           self.data_path))
-
+        """
+        num_train = int(len(df_raw)*0.7) 
+        num_test = int(len(df_raw)*0.2) 
+        num_vali = len(df_raw) - num_train - num_test 
+        border1s = [0, num_train-self.seq_len, len(df_raw)-num_test-self.seq_len] 
+        border2s = [num_train, num_train+num_vali, len(df_raw)] 
+        border1 = border1s[self.set_type] 
+        border2 = border2s[self.set_type] 
+        我们用来设置要加载的数据范围。而在 中，表示 ，表示一年的数据，表示数据的结束是一年零四个月，这是验证数据的结束。
+        df_data[border1s[0]:border2s[0]]border1s 12*30*24 12 months * 30 days * 24 hours 12*30*24+4*30*24
+        """
         border1s = [0, 12 * 30 * 24 - self.seq_len, 12 * 30 * 24 + 4 * 30 * 24 - self.seq_len]
         border2s = [12 * 30 * 24, 12 * 30 * 24 + 4 * 30 * 24, 12 * 30 * 24 + 8 * 30 * 24]
         border1 = border1s[self.set_type]
