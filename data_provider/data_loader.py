@@ -27,7 +27,7 @@ class Dataset_ETT_hour(Dataset):
             self.pred_len = size[2]
         # init
         assert flag in ['train', 'test', 'val']#如果它的条件返回错误，则终止程序运行
-        type_map = {'train': 0, 'val': 1, 'test': 2}
+        type_map = {'train': 0, 'val': 1, 'test': 2}#字典
         self.set_type = type_map[flag]
 
         self.features = features
@@ -64,12 +64,12 @@ class Dataset_ETT_hour(Dataset):
             cols_data = df_raw.columns[1:]
             df_data = df_raw[cols_data]
         elif self.features == 'S':
-            df_data = df_raw[[self.target]]
+            df_data = df_raw[[self.target]]#target='OT'
 
         if self.scale:
             train_data = df_data[border1s[0]:border2s[0]]
-            self.scaler.fit(train_data.values)
-            data = self.scaler.transform(df_data.values)
+            self.scaler.fit(train_data.values)##去均值和方差归一化
+            data = self.scaler.transform(df_data.values)##去均值和方差归一化
         else:
             data = df_data.values
 
