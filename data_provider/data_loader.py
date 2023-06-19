@@ -106,7 +106,7 @@ class Dataset_ETT_hour(Dataset):
         return len(self.data_x) - self.seq_len - self.pred_len + 1
 
     def inverse_transform(self, data):
-        return self.scaler.inverse_transform(data)
+        return self.scaler.inverse_transform(data)#将标准化后的数据转换为原始数据
 
 
 class Dataset_ETT_minute(Dataset):
